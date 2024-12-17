@@ -1,0 +1,15 @@
+body{
+    min-height: 800px;
+    border: 8px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.box{
+    height: 200px;
+    width: 200px;
+    background-color: blue;
+    font-size: 40pt;
+}

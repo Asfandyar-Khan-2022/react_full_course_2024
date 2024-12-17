@@ -1,0 +1,25 @@
+/* Import Inter font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+  background-color: rgb(27, 30, 40);
+  font-family: 'Inter';
+  margin: 0;
+}
+
+.navbar {
+  display: flex;
+  background-color: rgb(47, 48, 55);
+  color: rgb(11, 205, 230);
+  position: sticky;
+  box-shadow: 0 -6px 10px 5px rgba(0,0,0,0.5);
+}
+
+.main {
+  color: white;
+  padding: 20px;
+}
+
+.main li::marker {
+  color: rgb(39, 176, 244);
+}
