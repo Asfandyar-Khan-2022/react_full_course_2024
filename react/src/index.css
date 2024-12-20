@@ -1,0 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: rgb(251, 67, 67);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center vertically */
+  padding: 10px;
+}
+
+header > img {
+  height: 4rem;
+  width: 4rem;
+}
+
+header > h1 {
+  font-size: 3rem;
+  padding-left: 1rem;
+}
+
+body  {
+  background-color: rgb(255, 255, 255);
+  font-weight: 500;
+  font-family: Inter;
+}
+
+.location_image > img{
+  height: 400px;
+  width: 280px; /* Adjust the width as needed */
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgb(211, 210, 210); /* Add underline to the entry div */
+}
+
+.location_info{
+  display: flex;
+  align-items: flex-end; 
+}
+
+.location_info img{
+  height: 1rem;
+  padding-right: 0.2rem;
+}
+
+.location_info strong{
+  letter-spacing: 0.1rem;
+  color: rgb(137, 133, 133);
+}
+
+.location_info a{
+  padding-left: 1rem;
+  color: silver;
+}
+
+.description p{
+  padding-top: 0.5rem;
+  color: rgb(62, 61, 61);
+  font-size: x-large;
+}
+
+.description{
+  padding-left: 1rem;
+}
+
+.entry_container {
+  display: flex;
+  justify-content: center;
+  padding-top: 5vmax;
+}
