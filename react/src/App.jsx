@@ -1,32 +1,9 @@
-import Joke from './components/Joke';
-
 export default function App() {
+  const ninjaTurtles = ['Leonardo', 'Donatello', 'Michelangelo', 'Raphael']
+  const map1 = ninjaTurtles.map((turtle) => <p>{turtle}</p>)
   return (
-    <div className="joke-container">
-      <div className="joke">
-        <Joke 
-          setup="Why did the scarecrow win an award?"
-          punchline="Because he was outstanding in his field."
-        />
-      </div>
-      <div className="joke">
-        <Joke 
-          setup="What do you call a belt made out of watches?"
-          punchline="A waist of time."
-        />
-      </div>
-      <div className="joke">
-        <Joke 
-          setup="Why don't skeletons fight each other?"
-          punchline="They don't have the guts."
-        />
-      </div>
-      <div className="joke">
-        <Joke 
-          setup="Why did the math book look sad?"
-          punchline="Because it had too many problems."
-        />
-      </div>
-    </div>
-  );
+    <main>
+      {map1}
+    </main>
+  )
 }
