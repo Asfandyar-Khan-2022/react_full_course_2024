@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vertical Blinds with Slider</title>
+    <title>Resistor Value Finder</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,230 +13,113 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            background-color: #f4f4f9;
             height: 100vh;
-            background-color: #f0f0f0;
         }
 
-        .weather-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
+        h1 {
+            color: #333;
         }
 
-        /* Sunny Weather */
-        .weather-background.sunny {
-            background: linear-gradient(to bottom, #87CEEB, #FFD700);
-        }
-
-        .weather-background.sunny .sun {
-            position: absolute;
-            top: 20%;
-            left: 70%;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, #FFD700 60%, #FFA500);
-            border-radius: 50%;
-            box-shadow: 0 0 30px #FFD700;
-        }
-
-        /* Cloudy Weather */
-        .weather-background.cloudy {
-            background: linear-gradient(to bottom, #B0C4DE, #778899);
-        }
-
-        .weather-background.cloudy .cloud {
-            position: absolute;
-            top: 30%;
-            left: 40%;
-            width: 150px;
-            height: 80px;
-            background: #ffffff;
-            border-radius: 50%;
-            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .weather-background.cloudy .cloud:before,
-        .weather-background.cloudy .cloud:after {
-            content: "";
-            position: absolute;
-            background: #ffffff;
-            border-radius: 50%;
-        }
-
-        .weather-background.cloudy .cloud:before {
-            width: 100px;
-            height: 100px;
-            top: -50px;
-            left: -30px;
-        }
-
-        .weather-background.cloudy .cloud:after {
-            width: 70px;
-            height: 70px;
-            top: -30px;
-            right: -40px;
-        }
-
-        /* Rainy Weather */
-        .weather-background.rainy {
-            background: linear-gradient(to bottom, #5F9EA0, #4682B4);
-        }
-
-        .weather-background.rainy .raindrop {
-            position: absolute;
-            width: 5px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 50%;
-            animation: fall 1s infinite;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-100px);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(300px);
-                opacity: 0;
-            }
-        }
-
-        .blinds-container {
+        .resistor {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            width: 300px;
+            height: 50px;
+            background: #d6d6d6;
+            border-radius: 10px;
             position: relative;
-            width: 300px;
-            height: 200px;
-            overflow: hidden;
-            border: 2px solid #333;
-            background-color: #fff;
         }
 
-        .blind {
-            position: absolute;
-            top: 0;
+        .resistor-band {
             width: 20px;
-            height: 100%;
-            background: linear-gradient(to right, #555, #333, #555);
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease;
+            height: 50px;
+            margin: 0 5px;
+            border-radius: 5px;
         }
 
-        .controls {
-            margin-top: 20px;
+        .band1 {
+            background-color: brown;
         }
 
-        input[type="range"] {
-            width: 300px;
+        .band2 {
+            background-color: black;
         }
 
-        button {
-            margin-left: 10px;
-            padding: 5px 10px;
-            font-size: 16px;
+        .band3 {
+            background-color: red;
+        }
+
+        .band4 {
+            background-color: gold;
+        }
+
+        .tolerance {
+            position: absolute;
+            right: -15px;
+            background-color: gold;
+            width: 10px;
+            height: 50px;
+            border-radius: 5px;
+        }
+
+        .file-upload {
+            margin: 20px;
+        }
+
+        .result {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+        }
+
+        input[type="file"]:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
+    <h1>Resistor Value Finder</h1>
 
-<div class="weather-background" id="weatherBackground">
-    <!-- Weather elements dynamically added here -->
-</div>
+    <div class="resistor">
+        <div class="resistor-band band1"></div>
+        <div class="resistor-band band2"></div>
+        <div class="resistor-band band3"></div>
+        <div class="resistor-band band4"></div>
+        <div class="tolerance"></div>
+    </div>
 
-<div class="blinds-container" id="blinds">
-    <!-- Blinds will be dynamically added here -->
-</div>
+    <div class="file-upload">
+        <label for="imageUpload">Upload a Resistor Image:</label>
+        <input type="file" id="imageUpload" accept="image/*">
+    </div>
 
-<div class="controls">
-    <label for="blindSlider">Adjust Blinds: </label>
-    <input type="range" id="blindSlider" min="0" max="100" value="0">
+    <div class="result" id="result">Resistor Value: <span id="value">---</span></div>
 
-    <label for="timeSlider">Time of Day: </label>
-    <input type="range" id="timeSlider" min="0" max="24" value="12">
+    <script>
+        // Example script: Update resistor bands dynamically (mocked logic)
+        const bands = [
+            { class: 'band1', color: 'brown' },
+            { class: 'band2', color: 'black' },
+            { class: 'band3', color: 'red' },
+            { class: 'band4', color: 'gold' }
+        ];
 
-    <button id="autoTimeButton">Toggle Auto Time</button>
-</div>
-
-<script>
-    const blindsContainer = document.getElementById('blinds');
-    const blindSlider = document.getElementById('blindSlider');
-    const timeSlider = document.getElementById('timeSlider');
-    const autoTimeButton = document.getElementById('autoTimeButton');
-    const weatherBackground = document.getElementById('weatherBackground');
-
-    let autoTimeEnabled = false;
-    let autoTimeInterval;
-
-    // Function to set the weather background
-    function setWeatherBackground(weather) {
-        weatherBackground.className = `weather-background ${weather}`;
-        weatherBackground.innerHTML = "";
-
-        if (weather === 'sunny') {
-            const sun = document.createElement('div');
-            sun.classList.add('sun');
-            weatherBackground.appendChild(sun);
-        } else if (weather === 'cloudy') {
-            const cloud = document.createElement('div');
-            cloud.classList.add('cloud');
-            weatherBackground.appendChild(cloud);
-        } else if (weather === 'rainy') {
-            for (let i = 0; i < 50; i++) {
-                const raindrop = document.createElement('div');
-                raindrop.classList.add('raindrop');
-                raindrop.style.left = `${Math.random() * 100}%`;
-                raindrop.style.animationDelay = `${Math.random()}s`;
-                weatherBackground.appendChild(raindrop);
-            }
-        }
-    }
-
-    // Function to update time of day
-    function updateTimeOfDay(hour) {
-        if (hour >= 6 && hour <= 18) {
-            setWeatherBackground('sunny');
-        } else if (hour > 18 || hour < 6) {
-            setWeatherBackground('cloudy');
-        }
-        // Add logic for rain if needed dynamically
-    }
-
-    // Simulated weather condition (change this dynamically as needed)
-    const currentWeather = 'sunny'; // Options: sunny, cloudy, rainy
-    setWeatherBackground(currentWeather);
-
-    // Generate vertical blinds
-    const numBlinds = 15; // Number of blinds
-    const blindWidth = 300 / numBlinds; // Calculate width per blind
-
-    for (let i = 0; i < numBlinds; i++) {
-        const blind = document.createElement('div');
-        blind.classList.add('blind');
-        blind.style.left = `${i * blindWidth}px`;
-        blindsContainer.appendChild(blind);
-    }
-
-    const blinds = document.querySelectorAll('.blind');
-
-    // Update blinds based on slider value
-    blindSlider.addEventListener('input', (e) => {
-        const value = e.target.value; // Slider value (0 to 100)
-        blinds.forEach((blind, index) => {
-            const fullyOpen = -(blindWidth * index); // Move blind to stack
-            const fullyClosed = 0; // Blind covers its position
-            const currentPosition = fullyClosed + (fullyOpen - fullyClosed) * (value / 100);
-            blind.style.transform = `translateX(${currentPosition}px)`;
+        // Mock function to handle uploaded image
+        document.getElementById('imageUpload').addEventListener('change', function() {
+            const result = document.getElementById('value');
+            result.textContent = '1kΩ ±5%'; // Replace with actual AI-based computation result
         });
-    });
-
-    // Update time of day based on slider
-    timeSlider.addEventListener('input', (e) => {
-        const hour = parseInt(e.target.value, 10);
-        updateTimeOfDay(hour);
-    });
-
->
+    </script>
+</body>
+</html>
