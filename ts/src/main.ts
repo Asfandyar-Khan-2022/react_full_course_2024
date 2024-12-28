@@ -55,6 +55,13 @@ function completeOrder(orderId: number): Order | Error {
   return order
 }
 
+function addToArray<T>(array: T[], item: T): T[] | undefined{
+  array.push(item)
+  return array
+}
+
+addToArray(menu, {id: nextPizzaId++, name: 'Chicken Bacon Ranch', price: 12 })
+addToArray<Order>(orderQueue, { id: nextOrderId++, pizza: menu[2], status: 'completed'})
 
 export function getPizzaDetail(identifier: string | number): Pizza | undefined {
   if (typeof identifier === 'string') {
@@ -79,40 +86,3 @@ console.log('Menu:', menu)
 console.log('Cash in register:', cashInRegister)
 console.log('Order queue:', orderQueue)
 
-
-// type User = {
-//   id: number
-//   username: string
-//   role: 'member' | 'contributor' | 'admin'
-// }
-
-// type UpdatedUser = Partial<User>
-
-// let nextUserId: number = 1
-
-// const users: User[] = [
-//   { id: nextUserId, username: 'john_doe', role: 'member' },
-//   { id: nextUserId, username: 'jane_smith', role: 'contributor' },
-// ]
-
-// function updateUser(id: number, updates: UpdatedUser): void {
-//   const person = users.find(user => user.id == id)
-//   if (!person) {
-//     console.error('something went wrong')
-//     return
-//   }
-//   Object.assign(person, updates)
-// }
-
-// function addNewUser(newUser: Omit<User, 'id'>): User {
-//   const user: User = {
-//     id: nextUserId++,
-//     ...newUser
-//   }
-//   users.push(user)
-//   return user
-// }
-
-// addNewUser({ username: 'joe_schmoe', role: 'member' })
-
-// console.log(users)

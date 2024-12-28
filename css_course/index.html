@@ -3,14 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Audio Waveform Visualizer</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom, #ff4500, #ff6347);
+        }
+
+        .signal-container {
+            width: 300px;
+            height: 300px;
+            background: #0f3;
+            border-radius: 50%;
+            border: 8px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        canvas {
+            width: 90%;
+            height: 90%;
+        }
+    </style>
 </head>
 <body>
-    <div class="box">1</div>
-    <div class="box">2</div>
-    <div class="box">3</div>
-    <div class="box">4</div>
-    <div class="box">5</div>
+    <div class="signal-container">
+        <canvas id="waveform"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('waveform');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        // Load audio from a YouTube video or other source
+        const audio = new Audio('https://www.youtube.com/watch?v=kPa7bsKwL-c&ab_channel=LadyGagaVEVO'); // Replace with actual URL
+        audio.crossOrigin = "anonymous";
+        const source = audioContext.createMediaElementSource(audio);
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+
+        audio.play();
+
+        function drawWaveform() {
+            requestAnimationFrame(drawWaveform);
+
+            analyser.getByteTimeDomainData(dataArray);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#ff3b3b';
+
+            ctx.beginPath();
+
+            const sliceWidth = canvas.width / bufferLength;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                const v = dataArray[i] / 128.0;
+                const y = v * canvas.height / 2;
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+
+                x += sliceWidth;
+            }
+
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+        }
+
+        drawWaveform();
+    </script>
 </body>
 </html>

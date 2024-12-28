@@ -3,123 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resistor Value Finder</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: #f4f4f9;
-            height: 100vh;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        .resistor {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px 0;
-            width: 300px;
-            height: 50px;
-            background: #d6d6d6;
-            border-radius: 10px;
-            position: relative;
-        }
-
-        .resistor-band {
-            width: 20px;
-            height: 50px;
-            margin: 0 5px;
-            border-radius: 5px;
-        }
-
-        .band1 {
-            background-color: brown;
-        }
-
-        .band2 {
-            background-color: black;
-        }
-
-        .band3 {
-            background-color: red;
-        }
-
-        .band4 {
-            background-color: gold;
-        }
-
-        .tolerance {
-            position: absolute;
-            right: -15px;
-            background-color: gold;
-            width: 10px;
-            height: 50px;
-            border-radius: 5px;
-        }
-
-        .file-upload {
-            margin: 20px;
-        }
-
-        .result {
-            font-size: 1.2em;
-            color: #555;
-        }
-
-        input[type="file"] {
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        input[type="file"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="./src/index.css">
+    <title>Dragon Ball Tracker</title>
 </head>
 <body>
-    <h1>Resistor Value Finder</h1>
-
-    <div class="resistor">
-        <div class="resistor-band band1"></div>
-        <div class="resistor-band band2"></div>
-        <div class="resistor-band band3"></div>
-        <div class="resistor-band band4"></div>
-        <div class="tolerance"></div>
+    <div class="main">
+        <div class="randar-box">
+          <input type="checkbox" checked class="randar-checkbox"> 
+          <div class="randar-top"></div>
+          <div class="randar-top-body"></div>
+          <div class="randar-content">
+            <div class="rander-ball"></div>
+            <div class="rander-pos"></div>
+          </div>
+        </div>
     </div>
-
-    <div class="file-upload">
-        <label for="imageUpload">Upload a Resistor Image:</label>
-        <input type="file" id="imageUpload" accept="image/*">
-    </div>
-
-    <div class="result" id="result">Resistor Value: <span id="value">---</span></div>
 
     <script>
-        // Example script: Update resistor bands dynamically (mocked logic)
-        const bands = [
-            { class: 'band1', color: 'brown' },
-            { class: 'band2', color: 'black' },
-            { class: 'band3', color: 'red' },
-            { class: 'band4', color: 'gold' }
-        ];
 
-        // Mock function to handle uploaded image
-        document.getElementById('imageUpload').addEventListener('change', function() {
-            const result = document.getElementById('value');
-            result.textContent = '1kΩ ±5%'; // Replace with actual AI-based computation result
+        let Latitude = 0
+        let longitude = 0
+        // Function to calculate the x and y coordinates
+        function convertLatLonToXY(latA, lonA, latB, lonB) {
+            // Approximation for converting degrees to meters (assuming a spherical Earth)
+            const earthRadius = 6371000; // in meters
+            const toRadians = (degrees) => degrees * (Math.PI / 180);
+
+            // Latitude and longitude differences
+            const deltaLat = toRadians(latB - latA);
+            const deltaLon = toRadians(lonB - lonA);
+
+            // Convert to x and y using a simple equirectangular projection
+            const x = Math.round((earthRadius * deltaLon * Math.cos(toRadians(latA))));
+            const y = Math.round((earthRadius * deltaLat));
+
+            return { x, y };
+        }
+
+        // //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        const socket = new WebSocket('wss://gcqyfessid.execute-api.us-east-1.amazonaws.com/demo/'); // Replace with your WebSocket URL
+        // Event listener for receiving messages from the server
+        socket.addEventListener('message', (event) => {
+        // Split the string by commas and extract lat and lng
+        console.log(event.data)
+        const parts = event.data.split(', ');
+        const latPart = parts[1].split(':')[1]; // Extract the part after "lat:"
+        const lngPart = parts[2].split(':')[1]; // Extract the part after "lng:"
+
+        // Convert to numbers
+        Latitude = parseFloat(latPart);
+        longitude = parseFloat(lngPart);
+
+                // Example usage
+        const pointA = { lat: 52.447795, lon: -1.834834 }; // Los Angeles
+        const pointB = { lat: Latitude, lon: longitude }; // Las Vegas
+
+        const relativeCoordinates = convertLatLonToXY(pointA.lat, pointA.lon, pointB.lat, pointB.lon);
+        console.log(`Relative X: ${relativeCoordinates.x} meters`);
+        console.log(`Relative Y: ${relativeCoordinates.y} meters`);
+
+        let ballElement = document.getElementsByClassName('rander-ball')[0];
+        ballElement.style.left = `${relativeCoordinates.x}px`;
+        ballElement.style.top = `${-relativeCoordinates.y}px`;
+
+        console.log('Latitude:', Latitude);
+        console.log('Longitude:', longitude);
         });
+
+
     </script>
 </body>
 </html>
